@@ -37,12 +37,12 @@ class ListKontakPageState extends State<ListKontakPage> {
           itemBuilder: (context, index) {
             Kontak kontak = listKontak[index];
             return Padding(
-              key: Key('padding_list_$index'),
+              key: Key('padding_list$index'),
               padding: const EdgeInsets.only(
                   top: 20
               ),
               child: ListTile(
-                key: Key('list_tile_$index'),
+                key: Key('list_tile$index'),
                 leading: Icon(
                   Icons.person,
                   size: 50,

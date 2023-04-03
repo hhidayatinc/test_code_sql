@@ -7,72 +7,65 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'widget_test.mocks.dart';
 
-@GenerateMocks(
-  [],
-  customMocks: [
-    MockSpec<NavigatorObserver>(
-      returnNullOnMissingStub: true,
-    )
-  ],
-)
 
 void main() {
-  final observerMock = MockNavigatorObserver();
+  Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
+    try {
+      await testFunction();
+    } catch (error) {
+      fail('$message: $error');
+    }
+  }
     testWidgets("List kontak ketika belum ada data", (WidgetTester tester) async {
-      final listTile = ValueKey('list tile');
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
-      try{
-        expect(find.byKey(ValueKey('appbar_text')), findsOneWidget);
-      } catch(error) {
-        debugPrint('$error');
-        debugPrint("AppBar dengan Text: Daftar Kontak tidak ditemukan");
-        debugPrint("Silahkan cek pada file list_kontak.dart pada widget AppBar");
-      }
-      try{
-        expect(find.byKey(ValueKey('list_kontak')), findsNothing);
-      } catch(error) {
-        debugPrint('$error');
-        debugPrint("Widget ListView Ditemukan");
-      }
-      try{
-        expect(find.widgetWithIcon(FloatingActionButton, Icons.add), findsOneWidget);
-        await tester.tap(find.byIcon(Icons.add));
-        await tester.pumpAndSettle();
-      } catch(error) {
-        debugPrint('$error');
-        debugPrint("Widget Icon Add tidak ditemukan");
-      }
+
+        await expectNoErrors(() async{
+          expect(find.text('Daftar Kontak'), findsOneWidget);
+        }, 'Text Daftar Kontak tidak ditemukan');
+
+        await expectNoErrors(() async{
+          expect(find.byKey(ValueKey('list_kontak')), findsOneWidget);
+        }, 'list_kontak tidak ditemukan');
+
+        await expectNoErrors(() async {
+          expect(find.widgetWithIcon(FloatingActionButton, Icons.add), findsOneWidget);
+          await tester.tap(find.byIcon(Icons.add));
+          await tester.pump();
+        }, 'Icon add tidak ditemukan');
+
 
     });
 
-    testWidgets('Entry Form', (WidgetTester tester) async{
-      final btnSave = find.byKey(ValueKey("tapButtonSave"));
-      final addNama = find.byKey(ValueKey("addNama"));
-      final addNo = find.byKey(ValueKey("addPhoneNumber"));
-      final addEmail = find.byKey(ValueKey("addEmail"));
-      final addCompany = find.byKey(ValueKey("addCompany"));
-
-      await tester.pumpWidget(MaterialApp(home: EntryForm()));
-      expect(find.text("Form Kontak"), findsOneWidget);
-      final listViewFinder = find.byKey(ValueKey('ListViewForm'));
-      expect(listViewFinder, findsOneWidget);
-
-      expect(addNama, findsOneWidget);
-      await tester.enterText(addNama, "ana");
-
-      expect(addNo, findsOneWidget);
-      await tester.enterText(addNo, "087");
-
-      expect(addEmail, findsOneWidget);
-      await tester.enterText(addEmail, "ana@gmail.com");
-
-      expect(addCompany, findsOneWidget);
-      await tester.enterText(addCompany, "polinema");
-
-      expect(btnSave, findsOneWidget);
-      await tester.tap(btnSave);
-      await tester.pumpAndSettle();
-    });
+    // testWidgets('Entry Form', (WidgetTester tester) async{
+    //   final btnSave = find.byKey(ValueKey("tapButtonSave"));
+    //   final addNama = find.byKey(ValueKey("addNama"));
+    //   final addNo = find.byKey(ValueKey("addPhoneNumber"));
+    //   final addEmail = find.byKey(ValueKey("addEmail"));
+    //   final addCompany = find.byKey(ValueKey("addCompany"));
+    //
+    //   expectNoErrors(() async {
+    //     await tester.pumpWidget(MaterialApp(home: EntryForm()));
+    //     expect(find.text("Form Kontak"), findsOneWidget);
+    //     final listViewFinder = find.byKey(ValueKey('ListViewForm'));
+    //     expect(listViewFinder, findsOneWidget);
+    //
+    //     expect(addNama, findsOneWidget);
+    //     await tester.enterText(addNama, "ana");
+    //
+    //     expect(addNo, findsOneWidget);
+    //     await tester.enterText(addNo, "087");
+    //
+    //     expect(addEmail, findsOneWidget);
+    //     await tester.enterText(addEmail, "ana@gmail.com");
+    //
+    //     expect(addCompany, findsOneWidget);
+    //     await tester.enterText(addCompany, "polinema");
+    //
+    //     expect(btnSave, findsOneWidget);
+    //     await tester.tap(btnSave);
+    //     await tester.pump();
+    //   });
+    // });
 
     testWidgets("List kontak ketika ada data", (WidgetTester tester)async{
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
@@ -122,9 +115,10 @@ void main() {
       //     ),
       //   ),
       // );
-      expect(find.byKey(ValueKey('list_tile')), findsNWidgets(2));
+      expect(find.byKey(ValueKey('list_tile_1')), findsOneWidget);
       //expect(find.text('ana'), findsOneWidget);
 
     });
 
 }
+

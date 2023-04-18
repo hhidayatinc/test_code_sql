@@ -26,13 +26,13 @@ class ListKontakPageState extends State<ListKontakPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text("Daftar Kontak"),
           key: Key('appbar_text'),
         ),
       ),
       body: ListView.builder(
-        key: Key('list_kontak'),
+        key: const Key('list_kontak'),
           itemCount: listKontak.length,
           itemBuilder: (context, index) {
             Kontak kontak = listKontak[index];
@@ -43,7 +43,7 @@ class ListKontakPageState extends State<ListKontakPage> {
               ),
               child: ListTile(
                 key: Key('list_tile$index'),
-                leading: Icon(
+                leading: const Icon(
                   Icons.person,
                   size: 50,
                 ),
@@ -84,15 +84,15 @@ class ListKontakPageState extends State<ListKontakPage> {
                           onPressed: () {
                             _openFormEdit(kontak);
                           },
-                          icon: Icon(Icons.edit)
+                          icon: const Icon(Icons.edit)
                       ),
                       // button hapus
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: (){
                           //membuat dialog konfirmasi hapus
                           AlertDialog hapus = AlertDialog(
-                            title: Text("Information"),
+                            title: const Text("Information"),
                             content: Container(
                               height: 100,
                               child: Column(
@@ -112,10 +112,10 @@ class ListKontakPageState extends State<ListKontakPage> {
                                     _deleteKontak(kontak, index);
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Ya")
+                                  child: const Text("Ya")
                               ),
                               TextButton(
-                                child: Text('Tidak'),
+                                child: const Text('Tidak'),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -133,8 +133,8 @@ class ListKontakPageState extends State<ListKontakPage> {
           }),
       //membuat button mengapung di bagian bawah kanan layar
       floatingActionButton: FloatingActionButton(
-        key: Key('add icon'),
-        child: Icon(Icons.add),
+        key: const Key('add icon'),
+        child: const Icon(Icons.add),
         onPressed: (){
           _openFormCreate();
         },

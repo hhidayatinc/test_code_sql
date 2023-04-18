@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+
 import 'package:flutter_contact/model/kontak.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBHelper{
@@ -27,10 +28,10 @@ class DBHelper{
   }
 
   Future<Database?> _initDb() async {
-    String databasePath = await getDatabasesPath();
-    String path = join(databasePath, 'kontak.db');
-
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    final documentsDirectory = await getApplicationDocumentsDirectory();
+    final path = join(documentsDirectory.path, 'kontak.db');
+    return await openDatabase(path,
+        version: 1, onCreate: _onCreate);
   }
 
   //membuat tabel dan field-fieldnya
@@ -76,39 +77,3 @@ class DBHelper{
   }
 }
 
-  // void main() async{
-  //   WidgetsFlutterBinding.ensureInitialized();
-  //   final database = openDatabase(
-  //     join(await getDatabasesPath(), 'kontak.db'),
-  //         onCreate: (db, version){
-  //           return db.execute('CREATE TABLE kontak (id INTEGER PRIMARY KEY AUTOINCREMENT,nama TEXT,no TEXT,email TEXT,company TEXT)');
-  //         },
-  //         version: 1
-  //   );
-  //   Future<int> insertKontak(Kontak kontak) async{
-  //     final db = await database;
-  //     int count = await db.insert('kontak', kontak.toMap());
-  //     return count;
-  //   }
-  //
-  //   Future<int> updateKontak(Kontak kontak) async{
-  //     final db = await database;
-  //     int count = await db.update('kontak', kontak.toMap(), where: 'id = ?', whereArgs: [kontak.id]);
-  //     return count;
-  //   }
-  //
-  //   Future<int> deleteKontak(int id) async {
-  //     final db = await database;
-  //     int count = await db.delete('kontak', where: 'id = ?', whereArgs: [id]);
-  //     return count;
-  //   }
-  //
-  //   Future<List<Kontak>> getKontakList()async{
-  //     final db = await database;
-  //     final List<Map<String, dynamic>> maps = await db.query('kontak');
-  //     return List.generate(maps.length, (i) {
-  //       return Kontak(nama: maps[i]['nama'], no: maps[i]['no'], email: maps[i]['email'], company: maps[i]['company']);
-  //     });
-  //   }
-  // }
-//}

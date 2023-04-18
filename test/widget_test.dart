@@ -3,9 +3,6 @@ import 'package:flutter_contact/model/kontak.dart';
 import 'package:flutter_contact/screens/entry_form.dart';
 import 'package:flutter_contact/screens/list_kontak.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
-import 'widget_test.mocks.dart';
 
 
 void main() {

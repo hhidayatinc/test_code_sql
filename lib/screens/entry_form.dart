@@ -41,20 +41,20 @@ class EntryFormState extends State<EntryForm>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        title: Text('Form Kontak')
+        title: const Text('Form Kontak')
       ),
       body: Form(
         key: _form,
     child: ListView(
-      key: Key('ListViewForm'),
-        padding: EdgeInsets.all(16.0),
+      key: const Key('ListViewForm'),
+        padding: const EdgeInsets.all(16.0),
         children: [
           Padding(
             padding: const EdgeInsets.only(
               top: 20,
             ),
             child: TextFormField(
-              key: Key('addNama'),
+              key: const Key('addNama'),
               controller: namaController,
               decoration: InputDecoration(
                   labelText: 'Name',
@@ -74,7 +74,7 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextFormField(
-              key: Key('addPhoneNumber'),
+              key: const Key('addPhoneNumber'),
               controller: nomorController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -95,7 +95,7 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextFormField(
-              key: Key('addEmail'),
+              key: const Key('addEmail'),
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
@@ -122,7 +122,7 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextField(
-              key: Key('addCompany'),
+              key: const Key('addCompany'),
               controller: companyController,
               decoration: InputDecoration(
                   labelText: 'Company',
@@ -136,13 +136,13 @@ class EntryFormState extends State<EntryForm>{
                 top: 20
             ),
             child: ElevatedButton(
-              key: Key('tapButtonSave'),
+              key: const Key('tapButtonSave'),
               child: (widget.kontak == null)
-                  ? Text(
+                  ? const Text(
                 'Add',
                 style: TextStyle(color: Colors.white),
               )
-                  : Text(
+                  : const Text(
                 'Update',
                 style: TextStyle(color: Colors.white),
               ),
@@ -169,7 +169,7 @@ class EntryFormState extends State<EntryForm>{
           company: companyController!.text
       ));
       Navigator.pop(context, 'update');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Success updating data'),
       ));
     } else {
@@ -181,7 +181,7 @@ class EntryFormState extends State<EntryForm>{
         company: companyController!.text,
       ));
       Navigator.pop(context, 'save');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Success add data'),
       ));
     }

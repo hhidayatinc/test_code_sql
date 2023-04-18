@@ -8,7 +8,7 @@ class Kontak{
   Kontak({this.id, required this.nama, required this.no, required this.email, required this.company});
 
   Map<String, dynamic> toMap() {
-    var map = Map<String, dynamic>();
+    var map = <String, dynamic>{};
 
     if (id != null) {
       map['id'] = id;
@@ -22,11 +22,11 @@ class Kontak{
   }
 
   Kontak.fromMap(Map<String, dynamic> map) {
-    this.id = map['id'];
-    this.nama = map['nama'];
-    this.no = map['no'];
-    this.email = map['email'];
-    this.company = map['company'];
+    id = map['id'];
+    nama = map['nama'];
+    no = map['no'];
+    email = map['email'];
+    company = map['company'];
   }
 }
 

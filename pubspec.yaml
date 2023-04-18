@@ -37,8 +37,8 @@ dependencies:
   path: ^1.8.0
   sqflite_common_ffi:
   mockito:
-  build_runner:
   sqflite: ^2.0.0+3
+  path_provider:
 
 dev_dependencies:
   flutter_test:

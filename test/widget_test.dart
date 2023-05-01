@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_contact/database/dbhelper.dart';
 import 'package:flutter_contact/model/kontak.dart';
 import 'package:flutter_contact/screens/entry_form.dart';
 import 'package:flutter_contact/screens/list_kontak.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqflite/sqflite.dart';
+
+import 'testing_method.dart';
 
 
-void main() {
+Future main() async {
+  DBHelper db = DBHelper();
   Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
     try {
       await testFunction();
@@ -13,8 +18,23 @@ void main() {
       fail('$message: $error');
     }
   }
+  final contacts = [
+    Kontak(nama: "Ana", no: "123", email: "ana@gmail.com", company: "Tinc"),
+    Kontak(nama: "Riri", no: "123", email: "ana@gmail.com", company: "Tinc"),
+    Kontak(nama: "Rika", no: "123", email: "ana@gmail.com", company: "Tinc")
+  ];
+
+  setUpAll(() async{
+    sqfliteTestInit();
+    var db = await openDatabase(inMemoryDatabasePath);
+    await db.execute("CREATE TABLE tableKontak(id INTEGER PRIMARY KEY AUTOINCREMENT, "
+        "nama TEXT,"
+        "no TEXT,"
+        "email TEXT,"
+        "company TEXT)");
+  });
     testWidgets("List kontak ketika belum ada data", (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
 
         await expectNoErrors(() async{
           expect(find.text('Daftar Kontak'), findsOneWidget);
@@ -71,58 +91,41 @@ void main() {
       }, 'Button save tidak ditemukan');
     });
 
-    testWidgets("List kontak ketika ada data", (WidgetTester tester)async{
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
-      expect(find.byKey(ValueKey('appbar_text')), findsOneWidget);
-      expect(find.byKey(ValueKey('list_kontak')), findsOneWidget);
+  testWidgets("List kontak ketika ada data", (WidgetTester tester)async{
+    // Initialize database
+    DBHelper db = DBHelper();
 
-      final List<List<String>> daftarKontak = [
-        ['ana','087','ana@gmail.com','polinema'],['ifa','089','ifa@gmail.com','ub']
-      ];
+    // Define test data
+    final contacts = [
+      Kontak(nama: "Ana", no: "123", email: "ana@gmail.com", company: "Tinc"),
+      Kontak(nama: "Riri", no: "123", email: "ana@gmail.com", company: "Tinc"),
+      Kontak(nama: "Rika", no: "123", email: "ana@gmail.com", company: "Tinc")
+    ];
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: ListView.builder(
-              itemCount: daftarKontak.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  key: Key('list_tile$index'),
-                  title: Text(daftarKontak[index][0]),
-                  subtitle: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                        ),
-                        child: Text("Email: ${daftarKontak[index][2]}"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                        ),
-                        child: Text("Phone: ${daftarKontak[index][1]}"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8,
-                        ),
-                        child: Text("Company: ${daftarKontak[index][3]}"),
-                      )
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      );
-      expect(find.byKey(ValueKey('list_tile1')), findsOneWidget);
-      //expect(find.text('ana'), findsOneWidget);
+    // Pump widget and check initial state
+    await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
+    expect(find.byKey(ValueKey('appbar_text')), findsOneWidget);
+    expect(find.byKey(ValueKey('list_kontak')), findsOneWidget);
 
-    });
+    // Save test data to database
+    print('Save Kontak');
+    await db.saveKontak(contacts[0]);
+    await db.saveKontak(contacts[1]);
+    await db.saveKontak(contacts[2]);
+    print('save kontak done');
+
+    // Re-pump widget and wait for it to settle
+    await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
+    await tester.pump(Duration(seconds: 2));
+
+    // Check if test data is displayed correctly
+    expectNoErrors(() async{
+      expect(find.text("Ana"), findsOneWidget);
+      expect(find.text("Riri"), findsOneWidget);
+      expect(find.text("Rika"), findsOneWidget);
+    }, "Data not displayed correctly");
+  });
+
 
 }
 

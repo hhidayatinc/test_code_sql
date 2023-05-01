@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_contact/database/dbhelper.dart';
 import 'package:flutter_contact/screens/list_kontak.dart';
 
 void main() {
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const ListKontakPage(),
+      home: ListKontakPage(),
     );
   }
 }

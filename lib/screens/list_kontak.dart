@@ -5,7 +5,8 @@ import '../model/kontak.dart';
 import 'entry_form.dart';
 
 class ListKontakPage extends StatefulWidget {
-  const ListKontakPage({ Key? key }) : super(key: key);
+  // DBHelper db = DBHelper();
+  ListKontakPage({ Key? key}) : super(key: key);
 
   @override
   ListKontakPageState createState() => ListKontakPageState();
@@ -37,12 +38,12 @@ class ListKontakPageState extends State<ListKontakPage> {
           itemBuilder: (context, index) {
             Kontak kontak = listKontak[index];
             return Padding(
-              key: Key('padding_list$index'),
+              key: Key('padding_list'),
               padding: const EdgeInsets.only(
                   top: 20
               ),
               child: ListTile(
-                key: Key('list_tile$index'),
+                key: Key('list_tile'),
                 leading: const Icon(
                   Icons.person,
                   size: 50,

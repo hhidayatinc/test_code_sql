@@ -46,6 +46,8 @@ class DBHelper{
 
   //insert ke database
   Future<int?> saveKontak(Kontak kontak) async {
+    print("cek");
+    print(kontak.nama);
     var dbClient = await _db;
     return await dbClient!.insert(tableName, kontak.toMap());
   }

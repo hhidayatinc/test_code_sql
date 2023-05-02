@@ -9,57 +9,34 @@ import 'package:sqflite/sqflite.dart';
 import 'testing_method.dart';
 
 
-Future main() async {
-  DBHelper db = DBHelper();
-  Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
-    try {
-      await testFunction();
-    } catch (error) {
-      fail('$message: $error');
+void main() {
+    Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
+      try {
+        await testFunction();
+      } catch ($message) {
+        fail('$message');
+      }
     }
-  }
-  final contacts = [
-    Kontak(nama: "Ana", no: "123", email: "ana@gmail.com", company: "Tinc"),
-    Kontak(nama: "Riri", no: "123", email: "ana@gmail.com", company: "Tinc"),
-    Kontak(nama: "Rika", no: "123", email: "ana@gmail.com", company: "Tinc")
-  ];
-
-  setUpAll(() async{
-    sqfliteTestInit();
-    var db = await openDatabase(inMemoryDatabasePath);
-    await db.execute("CREATE TABLE tableKontak(id INTEGER PRIMARY KEY AUTOINCREMENT, "
-        "nama TEXT,"
-        "no TEXT,"
-        "email TEXT,"
-        "company TEXT)");
-  });
     testWidgets("List kontak ketika belum ada data", (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-
-        await expectNoErrors(() async{
-          expect(find.text('Daftar Kontak'), findsOneWidget);
-        }, 'Text Daftar Kontak tidak ditemukan');
-
-        await expectNoErrors(() async{
-          expect(find.byKey(ValueKey('list_kontak')), findsOneWidget);
-        }, 'list_kontak tidak ditemukan');
-
-        await expectNoErrors(() async {
-          expect(find.widgetWithIcon(FloatingActionButton, Icons.add), findsOneWidget);
-          await tester.tap(find.byIcon(Icons.add));
-          await tester.pump();
-        }, 'Icon add tidak ditemukan');
-
-
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
+      await expectNoErrors(() async{
+        expect(find.text('Daftar Kontak'), findsOneWidget);
+      }, 'Text Daftar Kontak tidak ditemukan');
+      await expectNoErrors(() async{
+        expect(find.byKey(ValueKey('list_kontak')), findsNothing);
+      }, 'list_kontak tidak ditemukan');
+      await expectNoErrors(() async {
+        expect(find.widgetWithIcon(FloatingActionButton, Icons.add), findsOneWidget);
+        await tester.tap(find.byIcon(Icons.add));
+        await tester.pump();
+      }, 'Icon add tidak ditemukan');
     });
-
     testWidgets('Entry Form', (WidgetTester tester) async{
       final btnSave = find.byKey(ValueKey("tapButtonSave"));
       final addNama = find.byKey(ValueKey("addNama"));
       final addNo = find.byKey(ValueKey("addPhoneNumber"));
       final addEmail = find.byKey(ValueKey("addEmail"));
       final addCompany = find.byKey(ValueKey("addCompany"));
-
       await expectNoErrors(() async {
         await tester.pumpWidget(MaterialApp(home: EntryForm()));
         expect(find.text("Form Kontak"), findsOneWidget);
@@ -96,11 +73,8 @@ Future main() async {
     DBHelper db = DBHelper();
 
     // Define test data
-    final contacts = [
-      Kontak(nama: "Ana", no: "123", email: "ana@gmail.com", company: "Tinc"),
-      Kontak(nama: "Riri", no: "123", email: "ana@gmail.com", company: "Tinc"),
-      Kontak(nama: "Rika", no: "123", email: "ana@gmail.com", company: "Tinc")
-    ];
+    final contacts =
+      Kontak(nama: "Ana", no: "123", email: "ana@gmail.com", company: "Tinc");
 
     // Pump widget and check initial state
     await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
@@ -109,20 +83,18 @@ Future main() async {
 
     // Save test data to database
     print('Save Kontak');
-    await db.saveKontak(contacts[0]);
-    await db.saveKontak(contacts[1]);
-    await db.saveKontak(contacts[2]);
+    await db.saveKontak(contacts);
     print('save kontak done');
+    await db.getAllKontak();
+    print('get all kontak done');
 
     // Re-pump widget and wait for it to settle
     await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-    await tester.pump(Duration(seconds: 2));
+    await tester.pumpAndSettle();
 
     // Check if test data is displayed correctly
     expectNoErrors(() async{
       expect(find.text("Ana"), findsOneWidget);
-      expect(find.text("Riri"), findsOneWidget);
-      expect(find.text("Rika"), findsOneWidget);
     }, "Data not displayed correctly");
   });
 

@@ -152,7 +152,7 @@ class ListKontakPageState extends State<ListKontakPage> {
     //ada perubahanan state
     setState(() {
       //hapus data pada listKontak
-      listKontak.clear();
+      //listKontak.clear();
 
       //lakukan perulangan pada variabel list
       list!.forEach((kontak) {

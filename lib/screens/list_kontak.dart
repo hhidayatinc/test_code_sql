@@ -27,6 +27,7 @@ class ListKontakPageState extends State<ListKontakPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        key: Key('app_bar'),
         title: const Center(
           child: Text("Daftar Kontak"),
           key: Key('appbar_text'),

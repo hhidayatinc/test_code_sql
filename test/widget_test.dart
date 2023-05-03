@@ -13,25 +13,31 @@ void main() {
     Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
       try {
         await testFunction();
-      } catch ($message) {
-        fail('$message');
+      } catch (error) {
+        fail('$message: $error');
       }
     }
     testWidgets("List kontak ketika belum ada data", (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       await expectNoErrors(() async{
+        expect(find.byKey(Key('app_bar')), findsOneWidget);
+      }, 'AppBar tidak ditemukan');
+      await expectNoErrors(() async{
         expect(find.text('Daftar Kontak'), findsOneWidget);
       }, 'Text Daftar Kontak tidak ditemukan');
       await expectNoErrors(() async{
-        expect(find.byKey(ValueKey('list_kontak')), findsNothing);
+        expect(find.byKey(ValueKey('list_kontak')), findsOneWidget);
       }, 'list_kontak tidak ditemukan');
+      await expectNoErrors(() async{
+        expect(find.byWidget(ListTile()), findsNothing);
+      }, 'ListTile ditemukan');
       await expectNoErrors(() async {
         expect(find.widgetWithIcon(FloatingActionButton, Icons.add), findsOneWidget);
         await tester.tap(find.byIcon(Icons.add));
         await tester.pump();
       }, 'Icon add tidak ditemukan');
     });
-    testWidgets('Entry Form', (WidgetTester tester) async{
+    testWidgets('Komponen Halaman Form', (WidgetTester tester) async{
       final btnSave = find.byKey(ValueKey("tapButtonSave"));
       final addNama = find.byKey(ValueKey("addNama"));
       final addNo = find.byKey(ValueKey("addPhoneNumber"));
@@ -42,7 +48,7 @@ void main() {
         expect(find.text("Form Kontak"), findsOneWidget);
       },'Teks Form Kontak tidak ditemukan');
       await expectNoErrors(() async{
-        final listViewFinder = find.byKey(ValueKey('ListViewForm'));
+        final listViewFinder = find.byKey(ValueKey('listviewform'));
         expect(listViewFinder, findsOneWidget);
       },'ListViewForm tidak ditemukan');
       await expectNoErrors(() async {
@@ -73,7 +79,7 @@ void main() {
     DBHelper db = DBHelper();
 
     // Define test data
-    final contacts =
+    var contacts =
       Kontak(nama: "Ana", no: "123", email: "ana@gmail.com", company: "Tinc");
 
     // Pump widget and check initial state
@@ -85,8 +91,8 @@ void main() {
     print('Save Kontak');
     await db.saveKontak(contacts);
     print('save kontak done');
-    await db.getAllKontak();
-    print('get all kontak done');
+    // List? result = await db.getAllKontak();
+    // print(result);
 
     // Re-pump widget and wait for it to settle
     await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param

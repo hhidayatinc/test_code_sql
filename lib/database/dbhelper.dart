@@ -49,7 +49,9 @@ class DBHelper{
     print("cek");
     print(kontak.nama);
     var dbClient = await _db;
-    return await dbClient!.insert(tableName, kontak.toMap());
+    var result = await dbClient!.insert(tableName, kontak.toMap());
+    print('sukses insert');
+    return result;
   }
 
   //read database

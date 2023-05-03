@@ -41,12 +41,13 @@ class EntryFormState extends State<EntryForm>{
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
+        key: Key('appbar'),
         title: const Text('Form Kontak')
       ),
       body: Form(
         key: _form,
     child: ListView(
-      key: const Key('ListViewForm'),
+      key: const Key('listviewform'),
         padding: const EdgeInsets.all(16.0),
         children: [
           Padding(
@@ -121,7 +122,7 @@ class EntryFormState extends State<EntryForm>{
             padding: const EdgeInsets.only(
               top: 20,
             ),
-            child: TextField(
+            child: TextFormField(
               key: const Key('addCompany'),
               controller: companyController,
               decoration: InputDecoration(

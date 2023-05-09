@@ -1,51 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../database/dbhelper.dart';
 import '../model/kontak.dart';
 import 'entry_form.dart';
 
 class ListKontakPage extends StatefulWidget {
-  // DBHelper db = DBHelper();
-  ListKontakPage({ Key? key}) : super(key: key);
 
   @override
   ListKontakPageState createState() => ListKontakPageState();
 }
 
 class ListKontakPageState extends State<ListKontakPage> {
-  List<Kontak> listKontak = [];
+  List<Kontak> listKontak = [
+    //Kontak(nama: "risa", no: "123", email: "ana@gmail.com", company: "Tinc"),
+  ];
   DBHelper db = DBHelper();
-
   @override
   void initState() {
     //menjalankan fungsi getallkontak saat pertama kali dimuat
-    _getAllKontak();
+    _refreshKontakList();
     super.initState();
+  }
+
+  void _refreshKontakList() async {
+    var list = await db.getAllKontak();
+    //ada perubahanan state
+    setState(() {
+      listKontak.clear();
+      //lakukan perulangan pada variabel list
+      list!.forEach((kontak) {
+        //masukan data ke listKontak
+        listKontak.add(Kontak.fromMap(kontak));
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+     return Scaffold(
       appBar: AppBar(
         key: Key('app_bar'),
-        title: const Center(
+        title: Center(
           child: Text("Daftar Kontak"),
           key: Key('appbar_text'),
         ),
       ),
       body: ListView.builder(
-        key: const Key('list_kontak'),
+          key: Key('list_kontak'),
           itemCount: listKontak.length,
-          itemBuilder: (context, index) {
-            Kontak kontak = listKontak[index];
+          itemBuilder: (context, i) {
+            Kontak kontak = listKontak[i];
+            for (int i = 0; i < listKontak.length; i++) {
+              var data = listKontak[i].nama;
+              //print or add data to any other list and insert to another list and save to database
+              print(data);
+            }
+            // return ListTile(
+            //   key: Key('list_tile'),
+            //   title: Text('${listKontak[i].nama}',),
+            // );
             return Padding(
               key: Key('padding_list'),
               padding: const EdgeInsets.only(
                   top: 20
               ),
               child: ListTile(
-                key: Key('list_tile'),
-                leading: const Icon(
+                key: Key('list tile'),
+                leading: Icon(
                   Icons.person,
                   size: 50,
                 ),
@@ -83,18 +105,22 @@ class ListKontakPageState extends State<ListKontakPage> {
                     children: [
                       // button edit
                       IconButton(
-                          onPressed: () {
-                            _openFormEdit(kontak);
+                          onPressed: () async{
+                            var result = await Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
+                            if (result == 'update') {
+                               _refreshKontakList();
+                            }
                           },
-                          icon: const Icon(Icons.edit)
+                          icon: Icon(Icons.edit)
                       ),
                       // button hapus
                       IconButton(
-                        icon: const Icon(Icons.delete),
+                        icon: Icon(Icons.delete),
                         onPressed: (){
                           //membuat dialog konfirmasi hapus
                           AlertDialog hapus = AlertDialog(
-                            title: const Text("Information"),
+                            title: Text("Information"),
                             content: Container(
                               height: 100,
                               child: Column(
@@ -105,19 +131,20 @@ class ListKontakPageState extends State<ListKontakPage> {
                                 ],
                               ),
                             ),
-                            //terdapat 2 button.
-                            //jika ya maka jalankan _deleteKontak() dan tutup dialog
-                            //jika tidak maka tutup dialog
+
                             actions: [
                               TextButton(
-                                  onPressed: (){
-                                    _deleteKontak(kontak, index);
+                                  onPressed: ()async{
+                                    await db.deleteKontak(kontak.id!);
+                                    setState(() {
+                                      listKontak.removeAt(i);
+                                    });
                                     Navigator.pop(context);
                                   },
-                                  child: const Text("Ya")
+                                  child: Text("Ya")
                               ),
                               TextButton(
-                                child: const Text('Tidak'),
+                                child: Text('Tidak'),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -135,58 +162,19 @@ class ListKontakPageState extends State<ListKontakPage> {
           }),
       //membuat button mengapung di bagian bawah kanan layar
       floatingActionButton: FloatingActionButton(
-        key: const Key('add icon'),
-        child: const Icon(Icons.add),
-        onPressed: (){
-          _openFormCreate();
-        },
+        key: Key('add icon'),
+        child: Icon(Icons.add),
+        onPressed: () async {
+          var result = await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => EntryForm()));
+        if (result == 'save') {
+         _refreshKontakList();
+        }},
       ),
 
     );
   }
 
-  //mengambil semua data Kontak
-  Future<void> _getAllKontak() async {
-    //list menampung data dari database
-    var list = await db.getAllKontak();
 
-    //ada perubahanan state
-    setState(() {
-      //hapus data pada listKontak
-      //listKontak.clear();
 
-      //lakukan perulangan pada variabel list
-      list!.forEach((kontak) {
-
-        //masukan data ke listKontak
-        listKontak.add(Kontak.fromMap(kontak));
-      });
-    });
-  }
-
-  //menghapus data Kontak
-  Future<void> _deleteKontak(Kontak kontak, int position) async {
-    await db.deleteKontak(kontak.id!);
-    setState(() {
-      listKontak.removeAt(position);
-    });
-  }
-
-  // membuka halaman tambah Kontak
-  Future<void> _openFormCreate() async {
-    var result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => EntryForm()));
-    if (result == 'save') {
-      await _getAllKontak();
-    }
-  }
-
-  //membuka halaman edit Kontak
-  Future<void> _openFormEdit(Kontak kontak) async {
-    var result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
-    if (result == 'update') {
-      await _getAllKontak();
-    }
-  }
 }

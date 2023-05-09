@@ -16,14 +16,14 @@ void main(){
     testWidgets('Komponen UI-AppBar ditemukan', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       await expectNoErrors(() async{
-        expect(find.byKey(Key('app_bar')), findsOneWidget);
+        expect(find.byType(AppBar), findsOneWidget);
       }, 'AppBar tidak ditemukan');
     });
 
   testWidgets('Komponen UI-AppBar dengan title ditemukan', (WidgetTester tester) async{
     await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
     await expectNoErrors(() async{
-      expect(find.byKey(Key('appbar_text')), findsOneWidget);
+      expect(find.widgetWithText(Center, 'Daftar Kontak'), findsOneWidget);
     }, 'AppBar dengan title "Daftar Kontak" tidak ditemukan');
   });
 

@@ -12,10 +12,7 @@ class ListKontakPage extends StatefulWidget {
 }
 
 class ListKontakPageState extends State<ListKontakPage> {
-  List<Kontak> listKontak = [
-    Kontak(nama: "risa", no: "123", email: "ana@gmail.com", company: "Tinc"),
-    Kontak(nama: "ina", no: "123", email: "ana@gmail.com", company: "Tinc")
-  ];
+  List<Kontak> listKontak = [];
   DBHelper db = DBHelper();
   @override
   void initState() {

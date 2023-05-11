@@ -14,48 +14,50 @@ void main(){
   testWidgets('Komponen UI-AppBar', (WidgetTester tester) async{
     await tester.pumpWidget(MaterialApp(home: EntryForm()));
     await expectNoErrors(() async {
-      expect(find.byKey(Key('appbar')), findsOneWidget);
+      expect(find.byType(AppBar), findsOneWidget);
     },'App Bar tidak ditemukan');
   });
+
+  testWidgets('Komponen UI-Title AppBar', (WidgetTester tester) async{
+    await tester.pumpWidget(MaterialApp(home: EntryForm()));
+    await expectNoErrors(() async {
+      expect(find.widgetWithText(AppBar, 'Form Kontak'), findsOneWidget);
+    },'Title tidak ditemukan');
+  });
+
+  testWidgets('Komponen UI-Form', (WidgetTester tester) async{
+    await tester.pumpWidget(MaterialApp(home: EntryForm()));
+    await expectNoErrors(() async {
+      expect(find.byType(Form), findsOneWidget);
+    },'Form tidak ditemukan');
+  });
+
   testWidgets('Komponen UI-ListView Form', (WidgetTester tester) async{
     await tester.pumpWidget(MaterialApp(home: EntryForm()));
     await expectNoErrors(() async {
-      expect(find.byKey(Key('listviewform')), findsOneWidget);
+      expect(find.byType(ListView), findsOneWidget);
     },'ListView tidak ditemukan');
   });
 
-  testWidgets('Komponen UI-TextFormField-Nama', (WidgetTester tester) async{
+  testWidgets('Komponen UI-TextFormField', (WidgetTester tester) async{
     await tester.pumpWidget(MaterialApp(home: EntryForm()));
     await expectNoErrors(() async {
-      expect(find.byKey(Key('addNama')), findsOneWidget);
-    },'TextFormField Nama tidak ditemukan');
+      expect(find.byType(TextFormField), findsNWidgets(4));
+    },'4 TextFormField tidak ditemukan');
   });
 
-  testWidgets('Komponen UI-TextFormField-No', (WidgetTester tester) async{
+  testWidgets('Komponen UI-ElevatedButton', (WidgetTester tester) async{
     await tester.pumpWidget(MaterialApp(home: EntryForm()));
     await expectNoErrors(() async {
-      expect(find.byKey(Key('addPhoneNumber')), findsOneWidget);
-    },'TextFormField Number tidak ditemukan');
-  });
-
-  testWidgets('Komponen UI-TextFormField-Email', (WidgetTester tester) async{
-    await tester.pumpWidget(MaterialApp(home: EntryForm()));
-    await expectNoErrors(() async {
-      expect(find.byKey(Key('addEmail')), findsOneWidget);
-    },'TextFormField Email tidak ditemukan');
-  });
-
-  testWidgets('Komponen UI-TextFormField-Company', (WidgetTester tester) async{
-    await tester.pumpWidget(MaterialApp(home: EntryForm()));
-    await expectNoErrors(() async {
-      expect(find.byKey(Key('addCompany')), findsOneWidget);
-    },'TextFormField Company tidak ditemukan');
-  });
-
-  testWidgets('Komponen UI-ElevatedButton-Save', (WidgetTester tester) async{
-    await tester.pumpWidget(MaterialApp(home: EntryForm()));
-    await expectNoErrors(() async {
-      expect(find.byKey(Key('tapButtonSave')), findsOneWidget);
+      expect(find.byType(ElevatedButton), findsOneWidget);
     },'Button tidak ditemukan');
   });
+
+  testWidgets('Komponen UI-ElevatedButton-Add', (WidgetTester tester) async{
+    await tester.pumpWidget(MaterialApp(home: EntryForm()));
+    await expectNoErrors(() async {
+      expect(find.widgetWithText(ElevatedButton, 'Add'), findsOneWidget);
+    },'Button Add tidak ditemukan');
+  });
+
 }

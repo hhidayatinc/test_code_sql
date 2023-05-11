@@ -12,7 +12,6 @@ void main(){
       fail('$message: $error');
     }
   }
-
     testWidgets('Komponen UI-AppBar ditemukan', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       await expectNoErrors(() async{
@@ -30,14 +29,14 @@ void main(){
     testWidgets('Komponen UI-ListView ditemukan', (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       await expectNoErrors(() async{
-        expect(find.byKey(Key('list_kontak')), findsOneWidget);
+        expect(find.byType(ListView), findsOneWidget);
       }, 'ListView tidak ditemukan');
     });
 
     testWidgets('Komponen UI-ListTile tidak ditemukan', (WidgetTester tester) async{
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       await expectNoErrors(() async{
-        expect(find.byWidget(ListTile()), findsNothing);
+        expect(find.byType(ListTile), findsNothing);
       }, 'ListTile ditemukan');
     });
 

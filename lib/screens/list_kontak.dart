@@ -27,7 +27,7 @@ class ListKontakPageState extends State<ListKontakPage> {
     var list = await db.getAllKontak();
     //ada perubahanan state
     setState(() {
-      listKontak.clear();
+      //listKontak.clear();
       //lakukan perulangan pada variabel list
       list!.forEach((kontak) {
         //masukan data ke listKontak
@@ -40,125 +40,117 @@ class ListKontakPageState extends State<ListKontakPage> {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        key: Key('app_bar'),
         title: Center(
           child: Text("Daftar Kontak"),
-          key: Key('appbar_text'),
         ),
       ),
       body: ListView.builder(
-          key: Key('list_kontak'),
           itemCount: listKontak.length,
           itemBuilder: (context, i) {
             Kontak kontak = listKontak[i];
-            for (int i = 0; i < listKontak.length; i++) {
-              var data = listKontak[i].nama;
-              //print or add data to any other list and insert to another list and save to database
-              print(data);
-            }
-            // return ListTile(
-            //   key: Key('list_tile'),
-            //   title: Text('${listKontak[i].nama}',),
+            // for (int i = 0; i < listKontak.length; i++) {
+            //   var data = listKontak[i].nama;
+            //   //print or add data to any other list and insert to another list and save to database
+            //   return Text('${listKontak[i].nama}');
+            // }
+            return getTextWidgets();
+            // return Padding(
+            //   padding: const EdgeInsets.only(
+            //       top: 20
+            //   ),
+            //   child: ListTile(
+            //     leading: Icon(
+            //       Icons.person,
+            //       size: 50,
+            //     ),
+            //     title: Text(
+            //         '${kontak.nama}'
+            //     ),
+            //     subtitle: Column(
+            //       mainAxisAlignment: MainAxisAlignment.start,
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Padding(
+            //           padding: const EdgeInsets.only(
+            //             top: 8,
+            //           ),
+            //           child: Text("Email: ${kontak.email}"),
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.only(
+            //             top: 8,
+            //           ),
+            //           child: Text("Phone: ${kontak.no}"),
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.only(
+            //             top: 8,
+            //           ),
+            //           child: Text("Company: ${kontak.company}"),
+            //         )
+            //       ],
+            //     ),
+            //     trailing:
+            //     FittedBox(
+            //       fit: BoxFit.fill,
+            //       child: Row(
+            //         children: [
+            //           // button edit
+            //           IconButton(
+            //               onPressed: () async{
+            //                 var result = await Navigator.push(context,
+            //                     MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
+            //                 if (result == 'update') {
+            //                    _refreshKontakList();
+            //                 }
+            //               },
+            //               icon: Icon(Icons.edit)
+            //           ),
+            //           // button hapus
+            //           IconButton(
+            //             icon: Icon(Icons.delete),
+            //             onPressed: (){
+            //               //membuat dialog konfirmasi hapus
+            //               AlertDialog hapus = AlertDialog(
+            //                 title: Text("Information"),
+            //                 content: Container(
+            //                   height: 100,
+            //                   child: Column(
+            //                     children: [
+            //                       Text(
+            //                           "Yakin ingin Menghapus Data ${kontak.nama}"
+            //                       )
+            //                     ],
+            //                   ),
+            //                 ),
+            //
+            //                 actions: [
+            //                   TextButton(
+            //                       onPressed: ()async{
+            //                         await db.deleteKontak(kontak.id!);
+            //                         setState(() {
+            //                           listKontak.removeAt(i);
+            //                         });
+            //                         Navigator.pop(context);
+            //                       },
+            //                       child: Text("Ya")
+            //                   ),
+            //                   TextButton(
+            //                     child: Text('Tidak'),
+            //                     onPressed: () {
+            //                       Navigator.pop(context);
+            //                     },
+            //                   ),
+            //                 ],
+            //               );
+            //               showDialog(context: context, builder: (context) => hapus);
+            //             },
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
             // );
-            return Padding(
-              key: Key('padding_list'),
-              padding: const EdgeInsets.only(
-                  top: 20
-              ),
-              child: ListTile(
-                key: Key('list tile'),
-                leading: Icon(
-                  Icons.person,
-                  size: 50,
-                ),
-                title: Text(
-                    '${kontak.nama}'
-                ),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                      ),
-                      child: Text("Email: ${kontak.email}"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                      ),
-                      child: Text("Phone: ${kontak.no}"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        top: 8,
-                      ),
-                      child: Text("Company: ${kontak.company}"),
-                    )
-                  ],
-                ),
-                trailing:
-                FittedBox(
-                  fit: BoxFit.fill,
-                  child: Row(
-                    children: [
-                      // button edit
-                      IconButton(
-                          onPressed: () async{
-                            var result = await Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
-                            if (result == 'update') {
-                               _refreshKontakList();
-                            }
-                          },
-                          icon: Icon(Icons.edit)
-                      ),
-                      // button hapus
-                      IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: (){
-                          //membuat dialog konfirmasi hapus
-                          AlertDialog hapus = AlertDialog(
-                            title: Text("Information"),
-                            content: Container(
-                              height: 100,
-                              child: Column(
-                                children: [
-                                  Text(
-                                      "Yakin ingin Menghapus Data ${kontak.nama}"
-                                  )
-                                ],
-                              ),
-                            ),
-
-                            actions: [
-                              TextButton(
-                                  onPressed: ()async{
-                                    await db.deleteKontak(kontak.id!);
-                                    setState(() {
-                                      listKontak.removeAt(i);
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                  child: Text("Ya")
-                              ),
-                              TextButton(
-                                child: Text('Tidak'),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                            ],
-                          );
-                          showDialog(context: context, builder: (context) => hapus);
-                        },
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            );
           }),
       //membuat button mengapung di bagian bawah kanan layar
       floatingActionButton: FloatingActionButton(
@@ -175,6 +167,22 @@ class ListKontakPageState extends State<ListKontakPage> {
     );
   }
 
+  void iterateKontak(){
+    for (int i = 0; i < listKontak.length; i++) {
+      var data = listKontak[i].nama;
+      //print or add data to any other list and insert to another list and save to database
+      Text(data.toString());
+    }
+  }
 
-
+  Widget getTextWidgets()
+  {
+    List<Widget> list =[];
+    for (int i = 0; i < listKontak.length; i++) {
+      var data = listKontak[i].nama;
+      //print or add data to any other list and insert to another list and save to database
+      list.add(new Text('${data}'));
+    }
+    return new Row(children: list);
+  }
 }

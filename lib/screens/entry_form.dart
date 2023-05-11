@@ -38,16 +38,13 @@ class EntryFormState extends State<EntryForm>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
-        key: Key('appbar'),
         title: const Text('Form Kontak')
       ),
       body: Form(
         key: _form,
     child: ListView(
-      key: const Key('listviewform'),
         padding: const EdgeInsets.all(16.0),
         children: [
           Padding(
@@ -55,7 +52,6 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextFormField(
-              key: const Key('addNama'),
               controller: namaController,
               decoration: InputDecoration(
                   labelText: 'Name',
@@ -75,7 +71,6 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextFormField(
-              key: const Key('addPhoneNumber'),
               controller: nomorController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
@@ -96,7 +91,6 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextFormField(
-              key: const Key('addEmail'),
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               validator: (value) {
@@ -123,7 +117,6 @@ class EntryFormState extends State<EntryForm>{
               top: 20,
             ),
             child: TextFormField(
-              key: const Key('addCompany'),
               controller: companyController,
               decoration: InputDecoration(
                   labelText: 'Company',
@@ -137,7 +130,6 @@ class EntryFormState extends State<EntryForm>{
                 top: 20
             ),
             child: ElevatedButton(
-              key: const Key('tapButtonSave'),
               child: (widget.kontak == null)
                   ? const Text(
                 'Add',

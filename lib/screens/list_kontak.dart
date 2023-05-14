@@ -112,6 +112,7 @@ class ListKontakPageState extends State<ListKontakPage> {
                         onPressed: (){
                           //membuat dialog konfirmasi hapus
                           AlertDialog hapus = AlertDialog(
+                            key: Key('alertdialog_hapus'),
                             title: Text("Information"),
                             content: Container(
                               height: 100,
@@ -126,6 +127,7 @@ class ListKontakPageState extends State<ListKontakPage> {
 
                             actions: [
                               TextButton(
+                                key: Key('button_hapus'),
                                   onPressed: ()async{
                                     await db.deleteKontak(kontak.id!);
                                     setState(() {

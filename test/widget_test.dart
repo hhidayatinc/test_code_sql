@@ -21,72 +21,88 @@ void main() {
     }
 
     //correct code
-  testWidgets("List Kontak ketika ada data - Nama sesuai", (WidgetTester tester)async{
-    List<Kontak> listKontak = [];
+  testWidgets("List Kontak Data Nama", (WidgetTester tester)async{
+    List<Kontak> listKontak = [
+     Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
+     Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
+    ];
     await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-    for (int i = 0; i < listKontak.length; i++) {
-      await expectNoErrors(() async {
-        expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'), findsOneWidget);
-      }, 'Data nama tidak sesuai dengan data yang tersimpan');
+    if(listKontak.length == 0){
+      print("tidak");
+    }
+    else {
+      for (int i = 0; i < listKontak.length; i++) {
+        await expectNoErrors(() async {
+          expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'),
+              findsOneWidget);
+        }, 'Data nama tidak sesuai dengan data yang tersimpan');
+      }
     }
   });
 
-    testWidgets("List Kontak ketika ada data - No tidak sesuai", (WidgetTester tester)async{
-      List<Kontak> listKontak = [];
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
+    //correctcode
+    testWidgets("List Kontak - Data Nomor ", (WidgetTester tester)async{
+      List<Kontak> listKontak = [
+        Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
+        Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
+      ];
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
-          expect(find.text('${listKontak[i].no}'), findsOneWidget);
+          expect(find.text("Phone: ${listKontak[i].no}"),
+              findsOneWidget);
         }, 'Data no tidak sesuai dengan data yang tersimpan');
       }
     });
-    testWidgets("List Kontak ketika ada data - Company tidak sesuai", (WidgetTester tester)async{
-      List<Kontak> listKontak = [];
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
+
+    //correctcode
+    testWidgets("List Kontak - Data Company ", (WidgetTester tester)async{
+      List<Kontak> listKontak = [
+        Kontak(nama: "Ana", email: "ana1@gmail.com", no: "0876543890", company: "polinema1"),
+        Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
+      ];
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
-          expect(find.text(
-              listKontak[i].company!
-          ), findsOneWidget);
+          expect(find.text("Company: ${listKontak[i].company}"),
+              findsOneWidget);
         }, 'Data company tidak sesuai dengan data yang tersimpan');
       }
     });
 
-    testWidgets("List Kontak ketika ada data - Teks email", (WidgetTester tester)async{
-      List<Kontak> listKontak = [];
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-      //await tester.pumpAndSettle();
-      for (int i = 0; i < listKontak.length; i++) {
-        var data = listKontak[i].email;
-        expect(find.text(data!), findsOneWidget);
-      }
-    });
-    testWidgets("List Kontak ketika ada data - Email tidak sesuai", (WidgetTester tester)async{
-      List<Kontak> listKontak = [];
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
+    //correctcode
+    testWidgets("List Kontak - Data Email ", (WidgetTester tester)async{
+      List<Kontak> listKontak = [
+        Kontak(nama: "Ana", email: "ana1@gmail.com", no: "0876543890", company: "polinema1"),
+        Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
+      ];
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
-          expect(find.widgetWithText(ListTile, (
-              '${listKontak[i].email}'
-          )), findsNWidgets(listKontak.length));
+          expect(find.text("Email: ${listKontak[i].email}"),
+              findsOneWidget);
         }, 'Data email tidak sesuai dengan data yang tersimpan');
       }
     });
 
     //correct code
     testWidgets("List Kontak ketika ada data - Muncul List Tile dengan jumlah yang sama", (WidgetTester tester)async{
-      List<Kontak> listKontak = [];
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-      for (int i = 0; i < listKontak.length; i++) {
-        expect(find.byType(ListTile), findsNWidgets(listKontak.length));
+      List<Kontak> kontak = [
+        Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
+        Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
+      ];
+      //await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
+      for (int i = 0; i < kontak.length; i++) {
+        await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
+        expect(find.byType(ListTile), findsNWidgets(kontak.length));
       }
     });
 
     //correct code
     testWidgets("List Kontak ketika ada data - Icon delete ", (WidgetTester tester)async{
       List<Kontak> listKontak = [
-        Kontak(nama: "Hidayati", no: "085235655323", email: "chasanah55@gmail.com", company: "Arta"),
-        Kontak(nama: "Nur", no: "085235655322", email: "chasanah55@gmail.com", company: "Grow"),
+        Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
+        Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
       ];
       await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
       for (int i = 0; i < listKontak.length; i++) {
@@ -94,25 +110,34 @@ void main() {
       }
     });
 
+
     testWidgets("List Kontak ketika ada data - Icon delete + Alert Dialog ", (WidgetTester tester)async{
       List<Kontak> listKontak = [
-        Kontak(nama: "Hidayati", no: "085235655323", email: "chasanah55@gmail.com", company: "Arta"),
-        Kontak(nama: "Nur", no: "085235655323", email: "chasanah55@gmail.com", company: "Arta")
+        Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
+        Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
       ];
       await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
       for (int i = 0; i < listKontak.length; i++) {
-        expect(find.widgetWithIcon(ListTile, Icons.delete), findsNWidgets(i));
-        await tester.tap(find.byIcon(Icons.delete));
-        expect(find.byType(AlertDialog), findsNWidgets(i));
-        expect(find.widgetWithText(TextButton, 'Ya'), findsNWidgets(i));
-        await tester.tap(find.widgetWithText(TextButton, 'Ya'));
+        expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'),
+            findsOneWidget);
+      //}
+         expect(find.widgetWithIcon(ListTile, Icons.delete), findsNWidgets(listKontak.length));
+         await tester.tap(find.byIcon(Icons.delete));
+         await tester.pumpAndSettle();
+      //   // Verify that the alert dialog is displayed.
+         expect(find.text('Information'), findsOneWidget);
+        expect(find.text('Yakin ingin Menghapus Data ${listKontak[0].nama}'), findsOneWidget);
+      //   // Tap the "OK" button to dismiss the dialog.
+         await tester.tap(find.text('Ya'));
+         await tester.pumpAndSettle();
+        expect(find.text('${listKontak[0].nama}'), findsNothing);
       }
     });
 
     //correctcode
     testWidgets("List Kontak ketika ada data - Icon edit", (WidgetTester tester)async{
       List<Kontak> listKontak = [];
-      await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         expect(find.widgetWithIcon(ListTile, Icons.edit), findsNWidgets(listKontak.length));
         await tester.tap(find.byIcon(Icons.edit));

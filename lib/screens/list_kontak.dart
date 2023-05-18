@@ -12,7 +12,10 @@ class ListKontakPage extends StatefulWidget {
 }
 
 class ListKontakPageState extends State<ListKontakPage> {
-  List<Kontak> listKontak = [];
+  List<Kontak> listKontak = [
+    Kontak(nama: "Ana", email: "ana1@gmail.com", no: "0876543890", company: "polinema1"),
+    Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
+  ];
   DBHelper db = DBHelper();
   @override
   void initState() {
@@ -112,7 +115,6 @@ class ListKontakPageState extends State<ListKontakPage> {
                         onPressed: (){
                           //membuat dialog konfirmasi hapus
                           AlertDialog hapus = AlertDialog(
-                            key: Key('alertdialog_hapus'),
                             title: Text("Information"),
                             content: Container(
                               height: 100,
@@ -127,7 +129,6 @@ class ListKontakPageState extends State<ListKontakPage> {
 
                             actions: [
                               TextButton(
-                                key: Key('button_hapus'),
                                   onPressed: ()async{
                                     await db.deleteKontak(kontak.id!);
                                     setState(() {

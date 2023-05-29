@@ -49,14 +49,6 @@ class ListKontakPageState extends State<ListKontakPage> {
           itemCount: listKontak.length,
           itemBuilder: (context, i) {
             Kontak kontak = listKontak[i];
-            // for (int i = 0; i < listKontak.length; i++) {
-            //   var data = listKontak[i].nama;
-            //   //print or add data to any other list and insert to another list and save to database
-            //   return Text('${listKontak[i].nama}');
-            // }
-
-            //return ListTile(title: Text('${listKontak[i].nama}'),);
-            //return getTextWidgets();
             return Padding(
               padding: const EdgeInsets.only(
                   top: 20
@@ -170,22 +162,45 @@ class ListKontakPageState extends State<ListKontakPage> {
     );
   }
 
-  void iterateKontak(){
-    for (int i = 0; i < listKontak.length; i++) {
-      var data = listKontak[i].nama;
-      //print or add data to any other list and insert to another list and save to database
-      Text(data.toString());
+  //mengambil semua data Kontak
+  Future<void> _getAllKontak() async {
+    //list menampung data dari database
+    var list = await db.getAllKontak();
+
+    //ada perubahanan state
+    setState(() {
+      //lakukan perulangan pada variabel list
+      list!.forEach((kontak) {
+
+        //masukan data ke listKontak
+        listKontak.add(Kontak.fromMap(kontak));
+      });
+    });
+  }
+
+  //menghapus data Kontak
+  Future<void> _deleteKontak(Kontak kontak, int position) async {
+    await db.deleteKontak(kontak.id!);
+    setState(() {
+      listKontak.removeAt(position);
+    });
+  }
+
+  // membuka halaman tambah Kontak
+  Future<void> _openFormCreate() async {
+    var result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => EntryForm()));
+    if (result == 'save') {
+      await _getAllKontak();
     }
   }
 
-  Widget getTextWidgets()
-  {
-    List<Widget> list =[];
-    for (int i = 0; i < listKontak.length; i++) {
-      var data = listKontak[i].nama;
-      //print or add data to any other list and insert to another list and save to database
-      list.add(new Text('${data}'));
+  //membuka halaman edit Kontak
+  Future<void> _openFormEdit(Kontak kontak) async {
+    var result = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
+    if (result == 'update') {
+      await _getAllKontak();
     }
-    return new Row(children: list);
   }
 }

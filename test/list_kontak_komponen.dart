@@ -18,7 +18,7 @@ void main(){
         expect(find.byType(AppBar), findsOneWidget);
       }, 'AppBar tidak ditemukan');
     });
-
+    
   testWidgets('Komponen UI-AppBar dengan title ditemukan', (WidgetTester tester) async{
     await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
     await expectNoErrors(() async{

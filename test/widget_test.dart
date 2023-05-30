@@ -1,5 +1,8 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_contact/component/list-item.dart';
 import 'package:flutter_contact/database/dbhelper.dart';
 import 'package:flutter_contact/main.dart';
 import 'package:flutter_contact/model/kontak.dart';
@@ -20,17 +23,14 @@ void main() {
       }
     }
 
+    Future<void> formEdit() async {}
+    Future<void> deleteKontak() async {}
+    List<Kontak> listKontak;
     //correct code
   testWidgets("List Kontak Data Nama", (WidgetTester tester)async{
-    List<Kontak> listKontak = [
-     // Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
-     // Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
-    ];
-    await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-    // if(listKontak.length == 0){
-    //   print("list kontak kosong  ");
-    // }
-    //else {
+    
+    await tester.pumpWidget(MaterialApp(home: ListItemWidget(editform: formEdit(), deletekontak: deleteKontak(), listkt: listKontak),)); 
+  
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
           expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'),

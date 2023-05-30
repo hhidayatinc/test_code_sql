@@ -1,109 +1,106 @@
 import 'package:flutter/material.dart';
 
-class ListItemWidget extends StatelessWidget {
-  final String nama, email, company, no;
-  final Function onPressed;
+import '../model/kontak.dart';
 
-  ListItemWidget({required this.nama,required this.email, required this.no, required this.company, required this.onPressed});
+class ListItemWidget extends StatelessWidget {
+  final Future<void> editform, deletekontak;
+  final List<Kontak> listkt;
+
+  ListItemWidget(
+      {Key? key, required this.editform,
+      required this.deletekontak,
+      required this.listkt}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(
-          top: 20
-      ),
-      child: ListTile(
-        leading: Icon(
-          Icons.person,
-          size: 50,
-        ),
-        title: Text(
-            '$nama'
-        ),
-        subtitle: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 8,
-              ),
-              child: Text("Email: $email"),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 8,
-              ),
-              child: Text("Phone: $no"),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 8,
-              ),
-              child: Text("Company: $company"),
-            )
-          ],
-        ),
-        trailing:
-        FittedBox(
-          fit: BoxFit.fill,
-          child: Row(
-            children: [
-              // button edit
-              IconButton(
-                  onPressed: () async{
-                    var result = await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
-                    if (result == 'update') {
-                      _refreshKontakList();
-                    }
-                  },
-                  icon: Icon(Icons.edit)
-              ),
-              // button hapus
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: (){
-                  //membuat dialog konfirmasi hapus
-                  AlertDialog hapus = AlertDialog(
-                    title: Text("Information"),
-                    content: Container(
-                      height: 100,
-                      child: Column(
-                        children: [
-                          Text(
-                              "Yakin ingin Menghapus Data ${kontak.nama}"
-                          )
-                        ],
+    return Column(children: [
+      ListView.builder(
+          itemCount: listkt.length,
+          itemBuilder: (context, i) {
+            Kontak kontak = listkt[i];
+            return Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.person,
+                  size: 50,
+                ),
+                title: Text('${kontak.nama}'),
+                subtitle: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
                       ),
+                      child: Text("Email: ${kontak.email}"),
                     ),
-
-                    actions: [
-                      TextButton(
-                          onPressed: ()async{
-                            await db.deleteKontak(kontak.id!);
-                            setState(() {
-                              listKontak.removeAt(i);
-                            });
-                            Navigator.pop(context);
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
+                      ),
+                      child: Text("Phone: ${kontak.no}"),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 8,
+                      ),
+                      child: Text("Company: ${kontak.company}"),
+                    )
+                  ],
+                ),
+                trailing: FittedBox(
+                  fit: BoxFit.fill,
+                  child: Row(
+                    children: [
+                      // button edit
+                      IconButton(
+                          onPressed: () {
+                            editform;
                           },
-                          child: Text("Ya")
-                      ),
-                      TextButton(
-                        child: Text('Tidak'),
+                          icon: const Icon(Icons.edit)),
+                      // button hapus
+                      IconButton(
+                        icon: const Icon(Icons.delete),
                         onPressed: () {
-                          Navigator.pop(context);
+                          //membuat dialog konfirmasi hapus
+                          AlertDialog hapus = AlertDialog(
+                            title: const Text("Information"),
+                            content: SizedBox(
+                              height: 100,
+                              child: Column(
+                                children: [
+                                  Text(
+                                      "Yakin ingin Menghapus Data ${kontak.nama}")
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                  onPressed: () {
+                                    deletekontak;
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text("Ya")),
+                              TextButton(
+                                child: const Text('Tidak'),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                          showDialog(
+                              context: context, builder: (context) => hapus);
                         },
-                      ),
+                      )
                     ],
-                  );
-                  showDialog(context: context, builder: (context) => hapus);
-                },
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+                  ),
+                ),
+              ),
+            );
+          }),
+    ]);
   }
 }

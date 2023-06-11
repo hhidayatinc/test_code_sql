@@ -20,23 +20,6 @@ class EntryFormState extends State<EntryForm>{
   bool _isValid = false;
 
   @override
-  void initState() {
-    namaController = TextEditingController(
-        text: widget.kontak == null ? '' : widget.kontak!.nama);
-
-    nomorController = TextEditingController(
-        text: widget.kontak == null ? '' : widget.kontak!.no);
-
-    emailController = TextEditingController(
-        text: widget.kontak == null ? '' : widget.kontak!.email);
-
-    companyController = TextEditingController(
-        text: widget.kontak == null ? '' : widget.kontak!.company);
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -130,13 +113,9 @@ class EntryFormState extends State<EntryForm>{
                 top: 20
             ),
             child: ElevatedButton(
-              child: (widget.kontak == null)
-                  ? const Text(
+              child:
+              const Text(
                 'Add',
-                style: TextStyle(color: Colors.white),
-              )
-                  : const Text(
-                'Update',
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
@@ -152,20 +131,7 @@ class EntryFormState extends State<EntryForm>{
     ));
   }
   Future<void> upsertKontak() async {
-    if (widget.kontak != null) {
-      //update
-      await db.updateKontak(Kontak(
-          id: widget.kontak!.id,
-          nama: namaController!.text,
-          no: nomorController!.text,
-          email: emailController!.text,
-          company: companyController!.text
-      ));
-      Navigator.pop(context, 'update');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Success updating data'),
-      ));
-    } else {
+
       //insert
       await db.saveKontak(Kontak(
         nama: namaController!.text,
@@ -178,5 +144,5 @@ class EntryFormState extends State<EntryForm>{
         content: Text('Success add data'),
       ));
     }
-  }
+
 }

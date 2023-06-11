@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_contact/screens/edit_form.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../database/dbhelper.dart';
@@ -6,35 +7,18 @@ import '../model/kontak.dart';
 import 'entry_form.dart';
 
 class ListKontakPage extends StatefulWidget {
-
   @override
   ListKontakPageState createState() => ListKontakPageState();
 }
 
 class ListKontakPageState extends State<ListKontakPage> {
-  List<Kontak> listKontak = [
-    Kontak(nama: "Ana", email: "ana1@gmail.com", no: "0876543890", company: "polinema1"),
-    Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
-  ];
+  List<Kontak> listKontak = [];
   DBHelper db = DBHelper();
   @override
   void initState() {
     //menjalankan fungsi getallkontak saat pertama kali dimuat
-    _refreshKontakList();
+    _getAllKontak();
     super.initState();
-  }
-
-  void _refreshKontakList() async {
-    var list = await db.getAllKontak();
-    //ada perubahanan state
-    setState(() {
-      //listKontak.clear();
-      //lakukan perulangan pada variabel list
-      list!.forEach((kontak) {
-        //masukan data ke listKontak
-        listKontak.add(Kontak.fromMap(kontak));
-      });
-    });
   }
 
   @override
@@ -93,11 +77,7 @@ class ListKontakPageState extends State<ListKontakPage> {
                       // button edit
                       IconButton(
                           onPressed: () async{
-                            var result = await Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
-                            if (result == 'update') {
-                               _refreshKontakList();
-                            }
+                            _openFormEdit(kontak);
                           },
                           icon: Icon(Icons.edit)
                       ),
@@ -121,12 +101,8 @@ class ListKontakPageState extends State<ListKontakPage> {
 
                             actions: [
                               TextButton(
-                                  onPressed: ()async{
-                                    await db.deleteKontak(kontak.id!);
-                                    setState(() {
-                                      listKontak.removeAt(i);
-                                    });
-                                    Navigator.pop(context);
+                                  onPressed: (){
+                                    _deleteKontak(kontak, i);
                                   },
                                   child: Text("Ya")
                               ),
@@ -151,12 +127,9 @@ class ListKontakPageState extends State<ListKontakPage> {
       floatingActionButton: FloatingActionButton(
         key: Key('add icon'),
         child: Icon(Icons.add),
-        onPressed: () async {
-          var result = await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EntryForm()));
-        if (result == 'save') {
-         _refreshKontakList();
-        }},
+        onPressed: () {
+          _openFormCreate();
+          },
       ),
 
     );
@@ -198,7 +171,7 @@ class ListKontakPageState extends State<ListKontakPage> {
   //membuka halaman edit Kontak
   Future<void> _openFormEdit(Kontak kontak) async {
     var result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
+        MaterialPageRoute(builder: (context) => EditForm(kontak: kontak)));
     if (result == 'update') {
       await _getAllKontak();
     }

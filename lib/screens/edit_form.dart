@@ -40,7 +40,7 @@ class EditFormState extends State<EditForm>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text('Form Kontak')
+            title: const Text('Edit Kontak')
         ),
         body: Form(
           key: _form,
@@ -139,10 +139,17 @@ class EditFormState extends State<EditForm>{
                     'Update',
                     style: TextStyle(color: Colors.white),
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     if(_form.currentState!.validate()){
                       _form.currentState!.save();
-                      upsertKontak();
+                      await db.updateKontak(Kontak(
+                          id: widget.kontak!.id,
+                          nama: namaController!.text,
+                          no: nomorController!.text,
+                          email: emailController!.text,
+                          company: companyController!.text
+                      ));
+                      Navigator.pop(context, 'update');
                     }
                   },
                 ),

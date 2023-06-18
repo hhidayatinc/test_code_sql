@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contact/screens/edit_form.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../database/dbhelper.dart';
 import '../model/kontak.dart';
 import 'entry_form.dart';
 
 class ListKontakPage extends StatefulWidget {
+
   @override
   ListKontakPageState createState() => ListKontakPageState();
 }
 
 class ListKontakPageState extends State<ListKontakPage> {
-  List<Kontak> listKontak = [];
+  List<Kontak> list = [];
   DBHelper db = DBHelper();
   @override
   void initState() {
@@ -30,9 +30,9 @@ class ListKontakPageState extends State<ListKontakPage> {
         ),
       ),
       body: ListView.builder(
-          itemCount: listKontak.length,
+          itemCount: list.length,
           itemBuilder: (context, i) {
-            Kontak kontak = listKontak[i];
+            Kontak kontak = list[i];
             return Padding(
               padding: const EdgeInsets.only(
                   top: 20
@@ -103,6 +103,7 @@ class ListKontakPageState extends State<ListKontakPage> {
                               TextButton(
                                   onPressed: (){
                                     _deleteKontak(kontak, i);
+                                    Navigator.pop(context);
                                   },
                                   child: Text("Ya")
                               ),
@@ -138,15 +139,15 @@ class ListKontakPageState extends State<ListKontakPage> {
   //mengambil semua data Kontak
   Future<void> _getAllKontak() async {
     //list menampung data dari database
-    var list = await db.getAllKontak();
-
+    var list2 = await db.getAllKontak();
     //ada perubahanan state
     setState(() {
+      list.clear();
       //lakukan perulangan pada variabel list
-      list!.forEach((kontak) {
+      list2!.forEach((kontak) {
 
         //masukan data ke listKontak
-        listKontak.add(Kontak.fromMap(kontak));
+        list.add(Kontak.fromMap(kontak));
       });
     });
   }
@@ -155,7 +156,7 @@ class ListKontakPageState extends State<ListKontakPage> {
   Future<void> _deleteKontak(Kontak kontak, int position) async {
     await db.deleteKontak(kontak.id!);
     setState(() {
-      listKontak.removeAt(position);
+      list.removeAt(position);
     });
   }
 
@@ -171,7 +172,7 @@ class ListKontakPageState extends State<ListKontakPage> {
   //membuka halaman edit Kontak
   Future<void> _openFormEdit(Kontak kontak) async {
     var result = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => EditForm(kontak: kontak)));
+        MaterialPageRoute(builder: (context) => EntryForm(kontak: kontak)));
     if (result == 'update') {
       await _getAllKontak();
     }

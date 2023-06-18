@@ -7,10 +7,17 @@ import 'package:flutter_contact/screens/entry_form.dart';
 import 'package:flutter_contact/screens/list_kontak.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'testing_method.dart';
 
-
+DBHelper db = DBHelper();
+List<Kontak> listKontak = [];
+void sqfliteTestInit() {
+  // Initialize ffi implementation
+  sqfliteFfiInit();
+  // Set global factory
+  databaseFactory = databaseFactoryFfi;
+}
 void main() {
     Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
       try {
@@ -20,23 +27,26 @@ void main() {
       }
     }
 
-    List<Kontak> listKontak = [
-      Kontak(nama: "Ana", email: "ana1@gmail.com", no: "0876543890", company: "polinema1"),
-      Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
-    ];
+    setUpAll(() async {
+      sqfliteTestInit();
+      var kontakList = await db.getAllKontak();
+      listKontak.clear(); // Move this line outside the loop
+      kontakList?.forEach((kontak) {
+        listKontak.add(Kontak.fromMap(kontak));
+      });
+    });
 
-    //correct code
-  testWidgets("List Kontak Data Nama", (WidgetTester tester)async{
-    await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
-    print(listKontak.length);
-      for (int i = 0; i < listKontak.length; i++) {
+    testWidgets("List Kontak Data Nama", (WidgetTester tester) async {
+      await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
+      print(listKontak.length);
+      print(listKontak[0].nama);
+      for (int i = 0; i < listKontak.length; i++) { // Change the condition to i < kontakList.length
         await expectNoErrors(() async {
-          expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'),
-              findsOneWidget);
+          expect(find.text('${listKontak[i].nama}'), findsOneWidget);
         }, 'Data nama tidak sesuai dengan data yang tersimpan');
       }
-    //}
-  });
+    });
+
 
     //correctcode
     testWidgets("List Kontak - Data Nomor ", (WidgetTester tester)async{
@@ -96,29 +106,6 @@ void main() {
     });
 
 
-    // testWidgets("List Kontak ketika ada data - Icon delete + Alert Dialog ", (WidgetTester tester)async{
-    //   List<Kontak> listKontak = [
-    //     Kontak(nama: "Ana", email: "ana@gmail.com", no: "0876543890", company: "polinema"),
-    //     Kontak(nama: "Ani", email: "ana@gmail.com", no: "087654389", company: "polinema")
-    //   ];
-    //   await tester.pumpWidget(MaterialApp(home: ListKontakPage())); //hilangin param
-    //   for (int i = 0; i < listKontak.length; i++) {
-    //     expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'),
-    //         findsOneWidget);
-    //   //}
-    //      expect(find.widgetWithIcon(ListTile, Icons.delete), findsNWidgets(listKontak.length));
-    //      await tester.tap(find.byIcon(Icons.delete));
-    //      await tester.pumpAndSettle();
-    //   //   // Verify that the alert dialog is displayed.
-    //      expect(find.text('Information'), findsOneWidget);
-    //     expect(find.text('Yakin ingin Menghapus Data ${listKontak[0].nama}'), findsOneWidget);
-    //   //   // Tap the "OK" button to dismiss the dialog.
-    //      await tester.tap(find.text('Ya'));
-    //      await tester.pumpAndSettle();
-    //     expect(find.text('${listKontak[0].nama}'), findsNothing);
-    //   }
-    // });
-
     //correctcode
     testWidgets("List Kontak ketika ada data - Icon edit", (WidgetTester tester)async{
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
@@ -128,6 +115,14 @@ void main() {
         await tester.pumpWidget(MaterialApp(home: EntryForm()));
       }
     });
+}
+
+Future<void> _getAllKontak() async {
+  var kontakList = await db.getAllKontak();
+  kontakList?.forEach((kontak) {
+    listKontak.clear();
+    listKontak.add(Kontak.fromMap(kontak));
+  });
 }
 
 

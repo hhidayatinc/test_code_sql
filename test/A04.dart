@@ -9,7 +9,7 @@ void main(){
     try {
       await testFunction();
     } catch (error) {
-      fail('$message: $error');
+      fail('$message');
     }
   }
     testWidgets('Komponen UI-AppBar ditemukan', (WidgetTester tester) async {

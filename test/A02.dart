@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'widget_test.dart';
+import 'A05.dart';
 
 /// Initialize sqflite for test.
 void sqfliteTestInit() {

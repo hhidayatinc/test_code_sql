@@ -142,7 +142,7 @@ class ListKontakPageState extends State<ListKontakPage> {
     var list = await db.getAllKontak();
     //ada perubahanan state
     setState(() {
-      //listKontak.clear();
+      listKontak.clear();
       //lakukan perulangan pada variabel list
       list!.forEach((kontak) {
 

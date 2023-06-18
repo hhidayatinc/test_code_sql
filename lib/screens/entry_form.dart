@@ -11,14 +11,11 @@ class EntryForm extends StatefulWidget{
 
 class EntryFormState extends State<EntryForm>{
   DBHelper db = DBHelper();
-  TextEditingController? idController;
   TextEditingController? namaController;
   TextEditingController? nomorController;
   TextEditingController? emailController;
   TextEditingController? companyController;
   final _form = GlobalKey<FormState>();
-  bool _isValid = false;
-
   @override
   void initState() {
 
@@ -139,7 +136,7 @@ class EntryFormState extends State<EntryForm>{
                   : const Text('Update',
                 style: TextStyle(color: Colors.white),
               ),
-              onPressed: (){
+              onPressed: () {
                 if(_form.currentState!.validate()){
                   _form.currentState!.save();
                   upsertKontak();
@@ -166,13 +163,12 @@ class EntryFormState extends State<EntryForm>{
         content: Text('Success updating data'),
       ));
     } else {
-
       //insert
       await db.saveKontak(Kontak(
         nama: namaController!.text,
         no: nomorController!.text,
         email: emailController!.text,
-        company: companyController!.text, id:  widget.kontak!.id,
+        company: companyController!.text,
       ));
       Navigator.pop(context, 'save');
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -180,5 +176,4 @@ class EntryFormState extends State<EntryForm>{
       ));
     }
   }
-
 }

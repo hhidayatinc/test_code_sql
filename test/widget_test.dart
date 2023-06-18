@@ -29,28 +29,22 @@ void main() {
 
     setUpAll(() async {
       sqfliteTestInit();
-      var kontakList = await db.getAllKontak();
-      listKontak.clear(); // Move this line outside the loop
-      kontakList?.forEach((kontak) {
-        listKontak.add(Kontak.fromMap(kontak));
-      });
+
+      await _getAllKontak();
     });
 
     testWidgets("List Kontak Data Nama", (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
-      print(listKontak.length);
-      print(listKontak[0].nama);
-      for (int i = 0; i < listKontak.length; i++) { // Change the condition to i < kontakList.length
+      for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
-          expect(find.text('${listKontak[i].nama}'), findsOneWidget);
+          expect(find.text('${listKontak[i].nama}'),
+              findsOneWidget);
         }, 'Data nama tidak sesuai dengan data yang tersimpan');
       }
     });
 
-
     //correctcode
     testWidgets("List Kontak - Data Nomor ", (WidgetTester tester)async{
-
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
@@ -62,7 +56,6 @@ void main() {
 
     //correctcode
     testWidgets("List Kontak - Data Company ", (WidgetTester tester)async{
-
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
@@ -74,7 +67,6 @@ void main() {
 
     //correctcode
     testWidgets("List Kontak - Data Email ", (WidgetTester tester)async{
-
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
         await expectNoErrors(() async {
@@ -88,8 +80,10 @@ void main() {
     testWidgets("List Kontak ketika ada data - Muncul List Tile dengan jumlah yang sama", (WidgetTester tester)async{
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
+        await expectNoErrors(() async{
+          expect(find.byType(ListTile), findsNWidgets(listKontak.length));
+        }, 'Jumlah list tile tidak sama');
         //await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
-        expect(find.byType(ListTile), findsNWidgets(listKontak.length));
       }
     });
 
@@ -118,9 +112,10 @@ void main() {
 }
 
 Future<void> _getAllKontak() async {
+  //await db.initDatabase();
   var kontakList = await db.getAllKontak();
   kontakList?.forEach((kontak) {
-    listKontak.clear();
+    // listKontak.clear();
     listKontak.add(Kontak.fromMap(kontak));
   });
 }

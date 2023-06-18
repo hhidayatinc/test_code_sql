@@ -12,7 +12,7 @@ class ListKontakPage extends StatefulWidget {
 }
 
 class ListKontakPageState extends State<ListKontakPage> {
-  List<Kontak> list = [];
+  List<Kontak> listKontak = [];
   DBHelper db = DBHelper();
   @override
   void initState() {
@@ -30,9 +30,9 @@ class ListKontakPageState extends State<ListKontakPage> {
         ),
       ),
       body: ListView.builder(
-          itemCount: list.length,
+          itemCount: listKontak.length,
           itemBuilder: (context, i) {
-            Kontak kontak = list[i];
+            Kontak kontak = listKontak[i];
             return Padding(
               padding: const EdgeInsets.only(
                   top: 20
@@ -139,25 +139,28 @@ class ListKontakPageState extends State<ListKontakPage> {
   //mengambil semua data Kontak
   Future<void> _getAllKontak() async {
     //list menampung data dari database
-    var list2 = await db.getAllKontak();
+    var list = await db.getAllKontak();
     //ada perubahanan state
     setState(() {
-      list.clear();
+      //listKontak.clear();
       //lakukan perulangan pada variabel list
-      list2!.forEach((kontak) {
+      list!.forEach((kontak) {
 
         //masukan data ke listKontak
-        list.add(Kontak.fromMap(kontak));
+        listKontak.add(Kontak.fromMap(kontak));
       });
     });
+    print(list?.length);
+    print(list?.toString());
   }
 
   //menghapus data Kontak
   Future<void> _deleteKontak(Kontak kontak, int position) async {
     await db.deleteKontak(kontak.id!);
     setState(() {
-      list.removeAt(position);
+      listKontak.removeAt(position);
     });
+    print(listKontak.length);
   }
 
   // membuka halaman tambah Kontak

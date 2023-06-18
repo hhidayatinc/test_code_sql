@@ -16,7 +16,17 @@ void sqfliteTestInit() {
 
 Future main() async {
   DBHelper dbhelper = DBHelper();
-  sqfliteTestInit();
+
+  setUpAll(()async{
+    sqfliteTestInit();
+    await dbhelper.initDatabase();
+  });
+
+  test('Database Connection Test', () async {
+    // Ensure that the database connection is open
+    final data = await dbhelper.getAllKontak();
+    expect(data, isNotNull);
+  });
 
   test('insert data', () async {
     await dbhelper.initDatabase();
@@ -24,12 +34,11 @@ Future main() async {
     int? result = await dbhelper.saveKontak(kontak);
     print(result);
     expect(result, isNotNull);
-    await dbhelper.closeDatabaseConnection();
   });
 
   test('Get All Kontak Test', () async {
     List? result = await dbhelper.getAllKontak();
-    print(result?.length);
+    print(result?.toString());
     expect(result?.length, greaterThanOrEqualTo(0));
   });
 
@@ -51,7 +60,6 @@ Future main() async {
     int id = result![0]['id'];
     int? deleteResult = await dbhelper.deleteKontak(id);
     expect(deleteResult, greaterThanOrEqualTo(0));
-    await dbhelper.closeDatabaseConnection();
   });
 
 }

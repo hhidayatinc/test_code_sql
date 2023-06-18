@@ -14,9 +14,16 @@ class DBHelper{
 
   static Database? _database;
 
-  Future<Database> get database async {
+  final String tableName = 'kontak';
+  final String columnId = 'id';
+  final String columnName = 'nama';
+  final String columnMobileNo = 'no';
+  final String columnEmail = 'email';
+  final String columnCompany = 'company';
+
+  Future<Database?> get database async {
     if (_database != null) {
-      return _database!;
+      return _database;
     }
 
     _database = await initDatabase();
@@ -24,20 +31,21 @@ class DBHelper{
   }
 
   Future<Database?> initDatabase() async {
-    final databasesPath = await getDatabasesPath();
-    final path = join(await databasesPath, 'kontak.db');
+    WidgetsFlutterBinding.ensureInitialized();
+    final databasesPath = await getApplicationDocumentsDirectory();
+    final path = join(databasesPath.path, 'listkontak.db');
     return openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
         // Create your tables here
         await db.execute('''
-          CREATE TABLE kontak(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nama TEXT,
-            no TEXT,
-            email TEXT,
-            company TEXT
+          CREATE TABLE $tableName(
+            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+            $columnName TEXT,
+            $columnMobileNo TEXT,
+            $columnEmail TEXT,
+            $columnCompany TEXT
           )
         ''');
       },
@@ -61,19 +69,19 @@ class DBHelper{
 
   //insert ke database
   Future<int?> saveKontak(Kontak kontak) async {
-    final dbClient = await database;
-    return await dbClient.insert('kontak', kontak.toMap());
+    var dbClient = await database;
+    return await dbClient!.insert(tableName, kontak.toMap());
+    //return await dbClient.rawInsert('INSERT INTO kontak (nama, no, email, company) VALUES (?, ?, ?, ?)', [kontak.nama, kontak.no, kontak.email, kontak.id]);
   }
-
   //read database
   Future<List?> getAllKontak() async {
-    final db = await database;
-    var result = await db.query('kontak', columns: [
-      'id',
-      'nama',
-      'no',
-      'email',
-      'company'
+    var db = await database;
+    var result = await db!.query(tableName, columns: [
+      columnId,
+      columnName,
+      columnCompany,
+      columnMobileNo,
+      columnEmail
     ]);
 
     return result.toList();
@@ -83,20 +91,16 @@ class DBHelper{
 
   //update database
   Future<int?> updateKontak(Kontak kontak) async {
-    final dbClient = await database;
-    return await dbClient.update('kontak', kontak.toMap(), where: 'id = ?', whereArgs: [kontak.id]);
+    var dbClient = await database;
+    return await dbClient!.update(tableName, kontak.toMap(), where: '$columnId = ?', whereArgs: [kontak.id]);
   }
 
   //hapus database
   Future<int?> deleteKontak(int id) async {
     final dbClient = await database;
-    return await dbClient.delete('kontak',  where: 'id = ?', whereArgs: [id]);
+    return await dbClient!.delete(tableName,  where: '$columnId = ?', whereArgs: [id]);
   }
 
-  Future<void> closeDatabaseConnection() async {
-    // Close the database connection
-    final dbClient = await database;
-    await dbClient.close();
-  }
+
 }
 

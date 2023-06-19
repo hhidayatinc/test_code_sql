@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_contact/screens/edit_form.dart';
-import 'package:sqflite/sqflite.dart';
 import '../database/dbhelper.dart';
 import '../model/kontak.dart';
 import 'entry_form.dart';
@@ -25,7 +23,7 @@ class ListKontakPageState extends State<ListKontakPage> {
   Widget build(BuildContext context) {
      return Scaffold(
       appBar: AppBar(
-        title: Center(
+        title: const Center(
           child: Text("Daftar Kontak"),
         ),
       ),
@@ -38,7 +36,7 @@ class ListKontakPageState extends State<ListKontakPage> {
                   top: 20
               ),
               child: ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.person,
                   size: 50,
                 ),
@@ -79,16 +77,16 @@ class ListKontakPageState extends State<ListKontakPage> {
                           onPressed: () async{
                             _openFormEdit(kontak);
                           },
-                          icon: Icon(Icons.edit)
+                          icon: const Icon(Icons.edit)
                       ),
                       // button hapus
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: (){
                           //membuat dialog konfirmasi hapus
                           AlertDialog hapus = AlertDialog(
-                            title: Text("Information"),
-                            content: Container(
+                            title: const Text("Information"),
+                            content: SizedBox(
                               height: 100,
                               child: Column(
                                 children: [
@@ -105,10 +103,10 @@ class ListKontakPageState extends State<ListKontakPage> {
                                     _deleteKontak(kontak, i);
                                     Navigator.pop(context);
                                   },
-                                  child: Text("Ya")
+                                  child: const Text("Ya")
                               ),
                               TextButton(
-                                child: Text('Tidak'),
+                                child: const Text('Tidak'),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -126,8 +124,8 @@ class ListKontakPageState extends State<ListKontakPage> {
           }),
       //membuat button mengapung di bagian bawah kanan layar
       floatingActionButton: FloatingActionButton(
-        key: Key('add icon'),
-        child: Icon(Icons.add),
+        key: const Key('add icon'),
+        child: const Icon(Icons.add),
         onPressed: () {
           _openFormCreate();
           },
@@ -144,11 +142,11 @@ class ListKontakPageState extends State<ListKontakPage> {
     setState(() {
       listKontak.clear();
       //lakukan perulangan pada variabel list
-      list!.forEach((kontak) {
+      for (var kontak in list!) {
 
         //masukan data ke listKontak
         listKontak.add(Kontak.fromMap(kontak));
-      });
+      }
     });
     print(list?.length);
     print(list?.toString());

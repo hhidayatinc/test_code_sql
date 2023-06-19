@@ -17,7 +17,6 @@ class EditFormState extends State<EditForm>{
   TextEditingController? emailController;
   TextEditingController? companyController;
   final _form = GlobalKey<FormState>();
-  bool _isValid = false;
 
   @override
   void initState() {

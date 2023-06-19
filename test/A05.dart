@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_contact/database/dbhelper.dart';
-import 'package:flutter_contact/main.dart';
 import 'package:flutter_contact/model/kontak.dart';
 import 'package:flutter_contact/screens/entry_form.dart';
 import 'package:flutter_contact/screens/list_kontak.dart';
@@ -23,7 +22,7 @@ void main() {
       try {
         await testFunction();
       } catch (error) {
-        fail('$message');
+        fail(message);
       }
     }
 

@@ -8,7 +8,7 @@ void main(){
     try {
       await testFunction();
     } catch ($message) {
-      fail('$message');
+      fail(message);
     }
   }
 

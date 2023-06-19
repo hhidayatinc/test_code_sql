@@ -11,6 +11,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 DBHelper db = DBHelper();
 List<Kontak> listKontak = [];
+
 void sqfliteTestInit() {
   // Initialize ffi implementation
   sqfliteFfiInit();

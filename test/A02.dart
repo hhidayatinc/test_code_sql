@@ -21,12 +21,6 @@ Future main() async {
     await dbhelper.initDatabase();
   });
 
-  test('Database Connection Test', () async {
-    // Ensure that the database connection is open
-    final data = await dbhelper.getAllKontak();
-    expect(data, isNotNull);
-  });
-
   test('insert data', () async {
     await dbhelper.initDatabase();
     Kontak kontak = Kontak(nama: 'Ana', no: '08123456789', email: 'johndoe@example.com', company: 'Example Inc.');

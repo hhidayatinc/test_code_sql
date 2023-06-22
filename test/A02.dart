@@ -22,8 +22,7 @@ Future main() async {
   });
 
   test('insert data', () async {
-    await dbhelper.initDatabase();
-    Kontak kontak = Kontak(nama: 'Ana', no: '08123456789', email: 'johndoe@example.com', company: 'Example Inc.');
+    Kontak kontak = Kontak(nama: 'ina', no: '08123456789', email: 'johndoe@example.com', company: 'Example Inc.');
     int? result = await dbhelper.saveKontak(kontak);
     print(result);
     expect(result, isNotNull);

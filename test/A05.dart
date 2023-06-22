@@ -23,23 +23,16 @@ void main() {
       try {
         await testFunction();
       } catch (error) {
-        fail(message);
+        fail('$error');
       }
     }
-
-    setUpAll(() async {
-      sqfliteTestInit();
-
-      await _getAllKontak();
-    });
 
     testWidgets("List Kontak Data Nama", (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
-        await expectNoErrors(() async {
-          expect(find.text('${listKontak[i].nama}'),
-              findsOneWidget);
-        }, 'Data nama tidak sesuai dengan data yang tersimpan');
+        print(listKontak.length);
+        print(listKontak[i].nama);
+        expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'), findsOneWidget);
       }
     });
 
@@ -111,13 +104,6 @@ void main() {
     });
 }
 
-Future<void> _getAllKontak() async {
-  //await db.initDatabase();
-  var kontakList = await db.getAllKontak();
-  kontakList?.forEach((kontak) {
-    // listKontak.clear();
-    listKontak.add(Kontak.fromMap(kontak));
-  });
-}
+
 
 

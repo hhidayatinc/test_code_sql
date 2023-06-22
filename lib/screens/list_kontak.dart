@@ -142,14 +142,11 @@ class ListKontakPageState extends State<ListKontakPage> {
     setState(() {
       listKontak.clear();
       //lakukan perulangan pada variabel list
-      for (var kontak in list!) {
-
+      for (var data in list!) {
         //masukan data ke listKontak
-        listKontak.add(Kontak.fromMap(kontak));
+        listKontak.add(Kontak.fromMap(data));
       }
     });
-    print(list?.length);
-    print(list?.toString());
   }
 
   //menghapus data Kontak
@@ -158,7 +155,6 @@ class ListKontakPageState extends State<ListKontakPage> {
     setState(() {
       listKontak.removeAt(position);
     });
-    print(listKontak.length);
   }
 
   // membuka halaman tambah Kontak

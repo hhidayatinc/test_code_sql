@@ -33,7 +33,6 @@ class EntryFormState extends State<EntryForm>{
 
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

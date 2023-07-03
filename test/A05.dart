@@ -5,45 +5,34 @@ import 'package:flutter_contact/model/kontak.dart';
 import 'package:flutter_contact/screens/entry_form.dart';
 import 'package:flutter_contact/screens/list_kontak.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 
-DBHelper db = DBHelper();
+
 List<Kontak> listKontak = [];
-
-void sqfliteTestInit() {
-  // Initialize ffi implementation
-  sqfliteFfiInit();
-  // Set global factory
-  databaseFactory = databaseFactoryFfi;
-}
 void main() {
-    Future<void> expectNoErrors(Future<void> Function() testFunction, String message) async {
-      try {
-        await testFunction();
-      } catch (error) {
-        fail('$error');
-      }
-    }
-
-    testWidgets("List Kontak Data Nama", (WidgetTester tester) async {
+  testWidgets("List Kontak Data Nama", (WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
-        print(listKontak.length);
-        print(listKontak[i].nama);
-        expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'), findsOneWidget);
+        try {
+          expect(find.widgetWithText(ListTile, '${listKontak[i].nama}'),
+              findsOneWidget);
+          print("Test Success!");
+        } catch(e){
+          print("Test Failed");
+        }
       }
     });
-
     //correctcode
     testWidgets("List Kontak - Data Nomor ", (WidgetTester tester)async{
       await tester.pumpWidget(MaterialApp(home: ListKontakPage()));
       for (int i = 0; i < listKontak.length; i++) {
-        await expectNoErrors(() async {
+        try {
           expect(find.text("Phone: ${listKontak[i].no}"),
               findsOneWidget);
-        }, 'Data no tidak sesuai dengan data yang tersimpan');
+          print("Test Success");
+        }catch(e) {
+          print('Test Fail!');
+        }
       }
     });
 

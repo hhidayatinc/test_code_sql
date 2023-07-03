@@ -4,7 +4,6 @@ import '../model/kontak.dart';
 import 'entry_form.dart';
 
 class ListKontakPage extends StatefulWidget {
-
   @override
   ListKontakPageState createState() => ListKontakPageState();
 }
